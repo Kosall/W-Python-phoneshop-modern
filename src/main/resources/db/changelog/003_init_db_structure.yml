@@ -1,0 +1,18 @@
+databaseChangeLog:
+- changeSet:
+    id: 003_init_db_structure
+    author: kosal.nim@gmail.com
+    changes:
+    - createTable:
+        tableName: colours
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+            name: colour_id
+            type: BIGINT
+        - column:
+            name: colour_name
+            type: VARCHAR(50)
+    
