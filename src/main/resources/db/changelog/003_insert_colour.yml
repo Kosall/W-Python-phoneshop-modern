@@ -1,0 +1,15 @@
+databaseChangeLog:
+- changeSet:
+    id: 003_insert_colours
+    author: nim.kosal.com
+    changes:
+    - loadData:
+        tableName: colours
+        columns:
+        - column:
+            name: colour_id
+            type: NUMERIC
+        - column:
+            name: colour_name
+            type: STRING
+        file: db/data/03_add_colour.csv
