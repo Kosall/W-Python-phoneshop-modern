@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/phoneshop_night
-    username: phoneshop_night
-    password: phoneshop123
+    url: jdbc:postgresql://localhost:5432/dbsi
+    username: si
+    password: si01
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,4 +14,7 @@ spring:
       matching-strategy: ant_path_matcher
   liquibase:
         change-log: classpath:db/changelog/db.changelog-master.yaml
-        enabled: true
+        enabled: false
+server: 
+    port: 8071
+        

@@ -30,13 +30,12 @@ public class BrandServiceImpl implements BrandService{
 	}
 
 	@Override
-	public Brand getById(Integer id) {
-		return brandRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Brand", id));
+	public Brand getById(Long id) {
+		return brandRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("brand", id));
 	}
 
 	@Override
-	public Brand update(Integer id, Brand brandUpdate) {
+	public Brand update(Long id, Brand brandUpdate) {
 		Brand brand = getById(id);
 		brand.setName(brandUpdate.getName()); // @TODO improve update
 		return brandRepository.save(brand);

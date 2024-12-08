@@ -3,5 +3,9 @@ databaseChangeLog:
     - file: db/changelog/001_init_db_structure.yml
   - include:
     - file: db/changelog/002_insert_brands.yml
+  - include:
+    - file: db/changelog/003_init_db_structure.yml
+  - include:
+    - file: db/changelog/003_insert_colour.yml
     
-    
+   
