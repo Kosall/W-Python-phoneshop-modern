@@ -1,6 +1,10 @@
 package com.piseth.java.school.phoneshopenight.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +30,10 @@ public class ModelController {
 		Model model = modelMapper.toModel(modelDTO);
 		model = modelService.save(model);
 		return ResponseEntity.ok(modelMapper.toModelDTO(model));
+	}
+	@GetMapping("brands/{id}")
+	public ResponseEntity<?> getByBrandId(@PathVariable Long id){
+		List<Model> listOfModel = modelService.getModelByBrandId(id);
+		return ResponseEntity.ok(listOfModel);
 	}
 }
