@@ -10,18 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name="products")
+@Table(name="products",uniqueConstraints = {@UniqueConstraint(columnNames = {"model_id","colour_id"})})
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="product_id")
 	private Long id;
-	@Column(name="product_name")
+	@Column(name="product_name",unique = true)
 	private String name;
 	@Column(name="unit")
 	private int avalabeUnit;
