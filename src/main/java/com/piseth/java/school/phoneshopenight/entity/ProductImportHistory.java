@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -25,10 +27,11 @@ public class ProductImportHistory {
 	@Column(name="import_unit")
 	private Integer importUnit;
 	@Column(name="unit_price")
-	private BigDecimal unitPrice;
+	private BigDecimal importPrice;
 	@ManyToOne
 	@JoinColumn(name="product_id")
 	private Product product;
 	@Column(name="import_date")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss") 
 	private LocalDateTime importDate;
 }
