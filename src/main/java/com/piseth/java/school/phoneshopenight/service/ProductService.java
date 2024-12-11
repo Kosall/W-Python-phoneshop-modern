@@ -1,0 +1,8 @@
+package com.piseth.java.school.phoneshopenight.service;
+
+import com.piseth.java.school.phoneshopenight.entity.Product;
+
+public interface ProductService {
+	Product create(Product product);
+
+}
