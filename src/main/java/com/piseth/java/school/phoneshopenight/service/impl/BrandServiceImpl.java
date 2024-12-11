@@ -2,6 +2,7 @@ package com.piseth.java.school.phoneshopenight.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -103,6 +104,14 @@ public class BrandServiceImpl implements BrandService{
 		
 		 Page<Brand> page = brandRepository.findAll(brandSpec, pageable);
 		return page;
+	}
+
+	@Override
+	public void delete(Brand brand) {
+		// TODO Auto-generated method stub
+		 
+		brandRepository.delete(brand);
+		
 	}
 	
 	
