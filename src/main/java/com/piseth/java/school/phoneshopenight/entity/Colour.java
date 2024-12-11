@@ -15,9 +15,9 @@ import lombok.Data;
 @Table(name="colours")
 public class Colour {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO,generator = "mySeqGen")
-	@SequenceGenerator(name="mySeqGen",sequenceName = "colours_colour_id_seq",initialValue = 1,allocationSize = 1)
-	@Column(name="colour_id",updatable=false,nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY/*generator = "mySeqGen"*/)
+	//@SequenceGenerator(name="mySeqGen",sequenceName = "colours_colour_id_seq",initialValue = 1,allocationSize = 1)
+	@Column(name="colour_id"/*,updatable=false,nullable = false*/)
 	private Long id;
 	@Column(name="colour_name")
 	private String name;
