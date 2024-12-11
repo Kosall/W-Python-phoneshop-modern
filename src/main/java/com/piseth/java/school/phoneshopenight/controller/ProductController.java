@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.piseth.java.school.phoneshopenight.dto.ProductDTO;
+import com.piseth.java.school.phoneshopenight.dto.ProductImportDTO;
 import com.piseth.java.school.phoneshopenight.entity.Product;
 import com.piseth.java.school.phoneshopenight.mapper.ProductMapper;
 import com.piseth.java.school.phoneshopenight.service.ProductService;
@@ -25,6 +26,11 @@ public class ProductController {
 		 product=productService.create(product);
 		return ResponseEntity.ok(product);
 		
+	}
+	@PostMapping("import")
+	public ResponseEntity<?> importing(@RequestBody ProductImportDTO productDTO){
+		productService.importProduct(productDTO);
+		return ResponseEntity.ok().build();
 	}
 	
 
