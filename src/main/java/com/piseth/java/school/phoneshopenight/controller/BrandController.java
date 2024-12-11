@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -78,6 +79,12 @@ public class BrandController {
 			.map(modelMapper::toModelDTO)
 			.toList();
 		return ResponseEntity.ok(list);
+	}
+	@DeleteMapping("{id}")
+	public ResponseEntity<?>delete(@PathVariable Long id){
+		Brand brand = brandService.getById(id);
+		brandService.delete(brand);
+		return ResponseEntity.ok().build();
 	}
 	
 	
