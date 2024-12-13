@@ -1,5 +1,7 @@
 package com.piseth.java.school.phoneshopenight.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +30,7 @@ public class ProductController {
 		
 	}
 	@PostMapping("import")
-	public ResponseEntity<?> importing(@RequestBody ProductImportDTO productDTO){
+	public ResponseEntity<?> importing(@RequestBody @Valid ProductImportDTO productDTO){
 		productService.importProduct(productDTO);
 		return ResponseEntity.ok().build();
 	}
