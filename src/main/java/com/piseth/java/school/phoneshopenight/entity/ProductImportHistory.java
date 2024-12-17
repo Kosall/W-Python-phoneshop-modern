@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -27,6 +28,7 @@ public class ProductImportHistory {
 	@Column(name="import_unit")
 	private Integer importUnit;
 	@Column(name="unit_price")
+	@DecimalMin(value = "0.000001",message = "price must be greater than 0.000001")
 	private BigDecimal importPrice;
 	@ManyToOne
 	@JoinColumn(name="product_id")
