@@ -1,5 +1,9 @@
 package com.piseth.java.school.phoneshopenight.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.piseth.java.school.phoneshopenight.dto.ProductImportDTO;
@@ -43,6 +47,24 @@ public class ProductServiceImpl implements ProductService {
 		productRepository.save(product);
 		ProductImportHistory importHistory = mapper.toProductImportHistory(importDTO, product);
 		productImportHistoryRepository.save(importHistory);
+		
+	}
+
+
+
+	@Override
+	public void setSalePrice(Long productId, BigDecimal price) {
+		Product product = getById(productId);
+		product.setSalePrice(price);
+		productRepository.save(product);
+		
+	}
+
+
+
+	@Override
+	public void validateStocking(Long productId, Integer quantity) {
+		// TODO Auto-generated method stub
 		
 	}
 
