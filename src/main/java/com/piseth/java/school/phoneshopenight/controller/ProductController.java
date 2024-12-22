@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.graphbuilder.curve.MultiPath;
 import com.piseth.java.school.phoneshopenight.dto.PriceDTO;
 import com.piseth.java.school.phoneshopenight.dto.ProductDTO;
 import com.piseth.java.school.phoneshopenight.dto.ProductImportDTO;
@@ -43,6 +46,11 @@ public class ProductController {
 		productService.setSalePrice(producdId, priceDTO.getPrice());
 		return ResponseEntity.ok().build();
 		
+	}
+	@PostMapping("upload")
+	public ResponseEntity<?>upload(@RequestParam("file") MultipartFile filer){
+		productService.upload(filer);
+		return ResponseEntity.ok().build();
 	}
 
 }
