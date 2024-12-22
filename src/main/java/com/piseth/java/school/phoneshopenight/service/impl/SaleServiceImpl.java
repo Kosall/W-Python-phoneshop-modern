@@ -21,6 +21,7 @@ import com.piseth.java.school.phoneshopenight.service.ProductService;
 import com.piseth.java.school.phoneshopenight.service.SaleService;
 
 import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class SaleServiceImpl implements SaleService {
@@ -31,33 +32,36 @@ public class SaleServiceImpl implements SaleService {
 
 	@Override
 	public void seller(SaleDTO saleDTO) {
-		//validate(saleDTO);
+		// validate(saleDTO);
 		getProductId(saleDTO);
 		getLisTOfDTO(saleDTO);
 		setSaleDetail(saleDTO);
-		
+
 	}
 	/*
 	 * private void saveSale(SaleDTO saleDTO) {
 	 * 
 	 * }
 	 */
-	
-	private List<Long>getProductId(SaleDTO saleDTO){
+
+	private List<Long> getProductId(SaleDTO saleDTO) {
 		List<Long> productId = saleDTO.getProductions().stream().map(ProductSellDTO::getProductId).toList();
 		return productId;
 	}
-	private void getLisTOfDTO(SaleDTO saleDTO){
+
+	private void getLisTOfDTO(SaleDTO saleDTO) {
 //		List<Long> productId = getProductId(saleDTO);
 //		List<Product> list = productId.stream().map(brs->productService.getById(brs)).toList();
 //		Map<Long, Product> collect = list.stream().collect(Collectors.toMap(Product::getId,Function.identity()));
-		saleDTO.getProductions().stream().forEach(br->{
+		saleDTO.getProductions().stream().forEach(br -> {
 			Product product = productService.getById(br.getProductId());
-			if(product.getAvalabeUnit()<br.getQuantity()) {
-				throw new ApiException(HttpStatus.BAD_REQUEST, "Product named:[%s] in stock is not enough!!".formatted(product.getName()));
+			if (product.getAvalabeUnit() < br.getQuantity()) {
+				throw new ApiException(HttpStatus.BAD_REQUEST,
+						"Product named:[%s] in stock is not enough!!".formatted(product.getName()));
 			}
 		});
 	}
+
 //	private void validate(SaleDTO saleDTO) {
 //		List<Long> productId = saleDTO.getProductions().stream().map(ProductSellDTO::getProductId).toList();
 //		//validation
@@ -87,27 +91,27 @@ public class SaleServiceImpl implements SaleService {
 //		}
 	private void setSaleDetail(SaleDTO saleDTO) {
 		List<Long> productId = saleDTO.getProductions().stream().map(ProductSellDTO::getProductId).toList();
-		//validation
+		// validation
 		productId.forEach(productService::getById);
 		List<Product> listOfProduct = productRepository.findAllById(productId);
-		Map<Long, Product> productionMap = listOfProduct.stream().collect(Collectors.toMap(Product::getId,Function.identity()));
-		Sale sale =new Sale();
+		Map<Long, Product> productionMap = listOfProduct.stream()
+				.collect(Collectors.toMap(Product::getId, Function.identity()));
+		Sale sale = new Sale();
 		sale.setSaleDate(saleDTO.getSaleDate());
 		repository.save(sale);
-		saleDTO.getProductions().forEach(pr->{
+		saleDTO.getProductions().forEach(pr -> {
 			Product product = productionMap.get(pr.getProductId());
-			SaleDetail saleDetail=new SaleDetail();
-			saleDetail.setAmount( product.getSalePrice());
+			SaleDetail saleDetail = new SaleDetail();
+			saleDetail.setAmount(product.getSalePrice());
 			saleDetail.setProduct(product);
 			saleDetail.setSale(sale);
 			saleDetail.setUnit(pr.getQuantity());
 			detailRepository.save(saleDetail);
-			Integer newIn=product.getAvalabeUnit()-pr.getQuantity();
+			Integer newIn = product.getAvalabeUnit() - pr.getQuantity();
 			product.setAvalabeUnit(newIn);
 			productRepository.save(product);
-			
+
 		});
 	}
-	}
-
+}
 
