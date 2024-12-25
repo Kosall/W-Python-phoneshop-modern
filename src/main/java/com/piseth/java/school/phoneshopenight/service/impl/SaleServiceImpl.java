@@ -34,7 +34,7 @@ public class SaleServiceImpl implements SaleService {
 	public void seller(SaleDTO saleDTO) {
 		// validate(saleDTO);
 		getProductId(saleDTO);
-		getLisTOfDTO(saleDTO);
+		getListOfDTO(saleDTO);
 		setSaleDetail(saleDTO);
 
 	}
@@ -49,7 +49,7 @@ public class SaleServiceImpl implements SaleService {
 		return productId;
 	}
 
-	private void getLisTOfDTO(SaleDTO saleDTO) {
+	private void getListOfDTO(SaleDTO saleDTO) {
 //		List<Long> productId = getProductId(saleDTO);
 //		List<Product> list = productId.stream().map(brs->productService.getById(brs)).toList();
 //		Map<Long, Product> collect = list.stream().collect(Collectors.toMap(Product::getId,Function.identity()));
