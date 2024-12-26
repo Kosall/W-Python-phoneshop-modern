@@ -22,7 +22,7 @@ public class Sale {
 	@Column(name="sale_id")
 	private Long id;
 	@Column(name="sale_date")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	//@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime saleDate;
 
 }
