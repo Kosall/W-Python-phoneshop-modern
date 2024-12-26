@@ -19,7 +19,7 @@ public class ProductImportDTO {
 	private Integer importUnit;
 	@DecimalMin(value = "0.000001",message = "price must be greater than 0.000001")
 	private BigDecimal importPrice;
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	//@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@NotNull(message = "importDate must not be null!!!")
 	private LocalDateTime importDate;
 	
