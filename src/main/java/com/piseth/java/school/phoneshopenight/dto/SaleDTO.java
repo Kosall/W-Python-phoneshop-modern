@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class SaleDTO {
 	private List<ProductSellDTO> productions;
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	//@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime saleDate;
 
 }
