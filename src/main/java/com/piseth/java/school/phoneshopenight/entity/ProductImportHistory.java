@@ -34,6 +34,6 @@ public class ProductImportHistory {
 	@JoinColumn(name="product_id")
 	private Product product;
 	@Column(name="import_date")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss") 
+	//@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss") 
 	private LocalDateTime importDate;
 }
