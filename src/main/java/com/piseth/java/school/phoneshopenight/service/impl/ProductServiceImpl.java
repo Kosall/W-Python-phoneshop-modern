@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,8 +26,11 @@ import com.piseth.java.school.phoneshopenight.exception.ResourceNotFoundExceptio
 import com.piseth.java.school.phoneshopenight.mapper.ProductMapper;
 import com.piseth.java.school.phoneshopenight.repository.ProductImportHistoryRepository;
 import com.piseth.java.school.phoneshopenight.repository.ProductRepository;
+import com.piseth.java.school.phoneshopenight.service.ColourService;
+import com.piseth.java.school.phoneshopenight.service.ModelService;
 import com.piseth.java.school.phoneshopenight.service.ProductService;
 
+import liquibase.repackaged.org.apache.commons.collections4.map.HashedMap;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,6 +39,8 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductRepository productRepository;
 	private final ProductImportHistoryRepository importHistories;
 	private final ProductMapper mapper;
+	private final ModelService modelService;
+	private final ColourService colourService;
 	// private final ProductService service;
 
 	@Override
@@ -77,54 +83,75 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void upload(MultipartFile file) {
+	public Map<Integer, String> upload(MultipartFile file) {
+		Map<Integer, String>mapping=new HashedMap<>();
+		
 		try {
 			Workbook workbook = new XSSFWorkbook(file.getInputStream());
 			Sheet sheet = workbook.getSheet("product");
 			Iterator<Row> iterator = sheet.iterator();
 			iterator.next();
 			while (iterator.hasNext()) {
-				Row row = iterator.next();
-				Cell cellModelId = row.getCell(0);
-				Long modelId = (long) cellModelId.getNumericCellValue();
+				Integer rowNumber=0;
+				try {
+					Integer index=0;
+					Row row = iterator.next();
+					Cell cellNo = row.getCell(index++);
+					rowNumber = (int) cellNo.getNumericCellValue();
+					Cell cellModelId = row.getCell(index++);
+					Long modelId = (long) cellModelId.getNumericCellValue();
 
-				Cell cellColourId = row.getCell(1);
-				Long colourId = (long) cellColourId.getNumericCellValue();
+					Cell cellColourId = row.getCell(index++);
+					Long colourId = (long) cellColourId.getNumericCellValue();
 
-				Cell cellUnit = row.getCell(2);
-				Integer importUnit = (int) cellUnit.getNumericCellValue();
+					Cell cellUnit = row.getCell(index++);
+					Integer importUnit = (int) cellUnit.getNumericCellValue();
+					if(importUnit<1) {
+						throw new ApiException(HttpStatus.BAD_REQUEST,"Unit must be greater than 0!!");
+					}
 
-				Cell cellUnitPrice = row.getCell(3);
-				Integer importPrice = (int) cellUnitPrice.getNumericCellValue();
+					Cell cellUnitPrice = row.getCell(index++);
+					Integer importPrice = (int) cellUnitPrice.getNumericCellValue();
+					if(importPrice<1) {
+						throw new ApiException(HttpStatus.BAD_REQUEST,"Unit price must be greater than 0!!");
+					}
 
-				Cell cellDate = row.getCell(4);
-				LocalDateTime importDate = cellDate.getLocalDateTimeCellValue();
+					Cell cellDate = row.getCell(index++);
+					LocalDateTime importDate = cellDate.getLocalDateTimeCellValue();
 
-				Product product = getByModelIdAndColourId(modelId, colourId);
+					Product product = getByModelIdAndColourId(modelId, colourId);
 
-				Integer availabeUnit = 0;
-				if (product.getAvalabeUnit() >= 0) {
-					availabeUnit = product.getAvalabeUnit();
+					Integer availabeUnit = 0;
+					if (product.getAvalabeUnit() >= 0) {
+						availabeUnit = product.getAvalabeUnit();
+					}
+					product.setAvalabeUnit(availabeUnit + importUnit);
+					productRepository.save(product);
+					ProductImportHistory importHistory = new ProductImportHistory();
+					importHistory.setImportDate(importDate);
+					importHistory.setImportUnit(importUnit);
+					importHistory.setImportPrice(BigDecimal.valueOf(importPrice));
+					importHistory.setProduct(product);
+					importHistories.save(importHistory);
+				}catch (ApiException e) {
+					mapping.put(rowNumber, e.getMessage());
 				}
-				product.setAvalabeUnit(availabeUnit + importUnit);
-				productRepository.save(product);
-				ProductImportHistory importHistory = new ProductImportHistory();
-				importHistory.setImportDate(importDate);
-				importHistory.setImportUnit(importUnit);
-				importHistory.setImportPrice(BigDecimal.valueOf(importPrice));
-				importHistory.setProduct(product);
-				importHistories.save(importHistory);
 
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return mapping;
 
 	}
 
 	@Override
 	public Product getByModelIdAndColourId(Long modelId, Long colourId) {
+		modelService.getById(modelId);
+		colourService.getById(colourId);
+		
+		
 		String letter = "[Product] with model id :%s && colour id :%s not found!!";
 		return productRepository.findByModelIdAndColourId(modelId, colourId)
 				.orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, letter.formatted(modelId, colourId)));
