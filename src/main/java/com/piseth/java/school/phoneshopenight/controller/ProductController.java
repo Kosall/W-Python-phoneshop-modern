@@ -1,5 +1,7 @@
 package com.piseth.java.school.phoneshopenight.controller;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -49,8 +51,8 @@ public class ProductController {
 	}
 	@PostMapping("upload")
 	public ResponseEntity<?>upload(@RequestParam("file") MultipartFile filer){
-		productService.upload(filer);
-		return ResponseEntity.ok().build();
+		Map<Integer, String> upload = productService.upload(filer);
+		return ResponseEntity.ok(upload);
 	}
 
 }
