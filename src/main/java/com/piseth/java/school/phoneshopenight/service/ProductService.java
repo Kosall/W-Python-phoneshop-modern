@@ -1,6 +1,7 @@
 package com.piseth.java.school.phoneshopenight.service;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +16,6 @@ public interface ProductService {
 	Product getByModelIdAndColourId(Long modelId,Long colourId);
 	void setSalePrice(Long productId,BigDecimal price);
 	void validateStocking(Long productId,Integer quantity);
-	void upload(MultipartFile file);
+	Map<Integer, String> upload(MultipartFile file);
 
 }
