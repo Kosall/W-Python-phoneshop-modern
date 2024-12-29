@@ -11,8 +11,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import lombok.AllArgsConstructor;
-
 @Configuration
 public class ConfigDateTimeJsonFormat{
 	 private static final String dateFormat = "yyyy-MM-dd";
