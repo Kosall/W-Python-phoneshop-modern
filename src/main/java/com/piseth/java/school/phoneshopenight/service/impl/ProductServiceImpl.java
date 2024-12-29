@@ -3,17 +3,15 @@ package com.piseth.java.school.phoneshopenight.service.impl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,19 +80,19 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
-	@Override
+	/*@Override
 	public Map<Integer, String> upload(MultipartFile file) {
-		Map<Integer, String>mapping=new HashedMap<>();
-		
+		Map<Integer, String> mapping = new HashedMap<>();
+
 		try {
 			Workbook workbook = new XSSFWorkbook(file.getInputStream());
 			Sheet sheet = workbook.getSheet("product");
 			Iterator<Row> iterator = sheet.iterator();
 			iterator.next();
 			while (iterator.hasNext()) {
-				Integer rowNumber=0;
+				Integer rowNumber = 0;
 				try {
-					Integer index=0;
+					Integer index = 0;
 					Row row = iterator.next();
 					Cell cellNo = row.getCell(index++);
 					rowNumber = (int) cellNo.getNumericCellValue();
@@ -106,14 +104,14 @@ public class ProductServiceImpl implements ProductService {
 
 					Cell cellUnit = row.getCell(index++);
 					Integer importUnit = (int) cellUnit.getNumericCellValue();
-					if(importUnit<1) {
-						throw new ApiException(HttpStatus.BAD_REQUEST,"Unit must be greater than 0!!");
+					if (importUnit < 1) {
+						throw new ApiException(HttpStatus.BAD_REQUEST, "Unit must be greater than 0!!");
 					}
 
 					Cell cellUnitPrice = row.getCell(index++);
 					Integer importPrice = (int) cellUnitPrice.getNumericCellValue();
-					if(importPrice<1) {
-						throw new ApiException(HttpStatus.BAD_REQUEST,"Unit price must be greater than 0!!");
+					if (importPrice < 1) {
+						throw new ApiException(HttpStatus.BAD_REQUEST, "Unit price must be greater than 0!!");
 					}
 
 					Cell cellDate = row.getCell(index++);
@@ -133,7 +131,7 @@ public class ProductServiceImpl implements ProductService {
 					importHistory.setImportPrice(BigDecimal.valueOf(importPrice));
 					importHistory.setProduct(product);
 					importHistories.save(importHistory);
-				}catch (ApiException e) {
+				} catch (ApiException e) {
 					mapping.put(rowNumber, e.getMessage());
 				}
 
@@ -144,14 +142,119 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return mapping;
 
+	}*/
+	/*@Override
+	public Map<Integer, String> upload(MultipartFile file){
+		Map<Integer, String> mapping = new HashedMap<>();
+		
+		Iterator<Row> rowIterator = getRowIterator(file);
+		rowIterator.next();
+		Integer rowNumber=0;
+		while (rowIterator.hasNext()) {
+			
+			try {
+				rowNumber++;
+				Integer index = 0;
+				 Row row = rowIterator.next();
+				Cell cellNumber = row.getCell(index++);
+				rowNumber = (int) cellNumber.getNumericCellValue();
+
+				Cell cellModelId = row.getCell(index++);
+				Long modelId = (long) cellModelId.getNumericCellValue();
+
+				Cell cellColourId = row.getCell(index++);
+				Long colourId = (long) cellColourId.getNumericCellValue();
+
+				Cell cellUnit = row.getCell(index++);
+				Integer importUnit = (int) cellUnit.getNumericCellValue();
+				if (importUnit < 1) {
+					throw new ApiException(HttpStatus.BAD_REQUEST, "Unit must be greater than 0!!");
+				}
+				Cell cellUnitPrice = row.getCell(index++);
+				Integer importPrice = (int) cellUnitPrice.getNumericCellValue();
+				if (importPrice < 1) {
+					throw new ApiException(HttpStatus.BAD_REQUEST, "Unit price must be greater than 0!!");
+				}
+				Cell cellDate = row.getCell(index++);
+				LocalDateTime importDate = cellDate.getLocalDateTimeCellValue();
+				
+				Product product = getByModelIdAndColourId(modelId, colourId);
+
+				Integer availabeUnit = 0;
+				if (product.getAvalabeUnit() > 0) {
+					availabeUnit = product.getAvalabeUnit();
+				}
+				product.setAvalabeUnit(availabeUnit + importUnit);
+				productRepository.save(product);
+				ProductImportHistory importHistory = new ProductImportHistory();
+				importHistory.setImportDate(importDate);
+				importHistory.setImportUnit(importUnit);
+				importHistory.setImportPrice(BigDecimal.valueOf(importPrice));
+				importHistory.setProduct(product);
+				importHistories.save(importHistory);
+				
+				
+			} catch (Exception e) {
+			
+				mapping.put(rowNumber, e.getMessage());
+			}
+		}
+		
+		return mapping;
 	}
+	
+//	private CellValue getCellValue(MultipartFile file) {
+//		CellValue[] cellValues;
+//		Cell cell = getCell(file);
+//		Integer numericCellValue = (int) cell.getNumericCellValue();
+//	}
+//	
+//	private Cell getCell(MultipartFile file) {
+//		Row row = getRow(file);
+//		Integer index=0;
+//		Cell cell = row.getCell(index++);
+//		return cell;
+//		
+//	}
+//
+//	private Row getRow(MultipartFile file) {
+//		Iterator<Row> rowIterator = getRowIterator(file);
+//		rowIterator.next();
+//		while(rowIterator.hasNext()) {
+//			Row row = rowIterator.next();
+//			return row;
+//		}
+//		return null;
+//	}
+
+	private Iterator<Row> getRowIterator(MultipartFile file) {
+		Sheet sheet = getSheet(file);
+		Iterator<Row> rowIterator = sheet.iterator();
+
+		return rowIterator;
+
+	}
+
+	private Sheet getSheet(MultipartFile file) {
+			Sheet sheet=null;
+		try {
+			Workbook workbook = new XSSFWorkbook(file.getInputStream());
+			sheet=workbook.getSheet("product");
+			return sheet;
+			
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		
+	
+		return null;
+
+	}*/
 
 	@Override
 	public Product getByModelIdAndColourId(Long modelId, Long colourId) {
 		modelService.getById(modelId);
 		colourService.getById(colourId);
-		
-		
 		String letter = "[Product] with model id :%s && colour id :%s not found!!";
 		return productRepository.findByModelIdAndColourId(modelId, colourId)
 				.orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, letter.formatted(modelId, colourId)));
