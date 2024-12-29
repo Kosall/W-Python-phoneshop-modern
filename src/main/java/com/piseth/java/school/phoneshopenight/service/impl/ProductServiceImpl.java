@@ -143,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
 		return mapping;
 
 	}*/
-	/*@Override
+	@Override
 	public Map<Integer, String> upload(MultipartFile file){
 		Map<Integer, String> mapping = new HashedMap<>();
 		
@@ -249,7 +249,7 @@ public class ProductServiceImpl implements ProductService {
 	
 		return null;
 
-	}*/
+	}
 
 	@Override
 	public Product getByModelIdAndColourId(Long modelId, Long colourId) {
