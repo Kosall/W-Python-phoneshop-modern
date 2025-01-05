@@ -259,5 +259,6 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.findByModelIdAndColourId(modelId, colourId)
 				.orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, letter.formatted(modelId, colourId)));
 	}
+	
 
 }
