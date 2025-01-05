@@ -70,6 +70,7 @@ public class BrandServiceImpl implements BrandService{
 		
 	}
 	*/
+	
 
 	@Override
 	public Page<Brand> getBrands(Map<String, String> params) {
