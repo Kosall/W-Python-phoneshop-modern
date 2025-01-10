@@ -9,7 +9,7 @@
 		<version>2.7.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.piseth.java.school</groupId>
+	<groupId>org.kosal.learner.java</groupId>
 	<artifactId>modern-mobile</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>modern-mobile</name>
