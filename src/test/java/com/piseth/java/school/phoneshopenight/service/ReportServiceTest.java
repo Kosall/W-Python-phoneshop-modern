@@ -61,6 +61,7 @@ public class ReportServiceTest {
 		assertEquals( expense1.getTotalAmount().doubleValue(),7800.00);
 		
 		
+		
 	}
 
 }
