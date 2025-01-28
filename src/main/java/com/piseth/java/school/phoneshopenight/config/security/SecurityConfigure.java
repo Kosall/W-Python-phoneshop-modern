@@ -3,18 +3,19 @@ package com.piseth.java.school.phoneshopenight.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import com.piseth.java.school.phoneshopenight.config.based.secure.Permission;
 import com.piseth.java.school.phoneshopenight.config.based.secure.RoleEnum;
+import com.piseth.java.school.phoneshopenight.config.jwt.JwtLoginfilter;
+import com.piseth.java.school.phoneshopenight.config.jwt.TokenVerifier;
 
 @Configuration
 @EnableGlobalMethodSecurity(
@@ -29,18 +30,21 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 		.csrf().disable()
-		.authorizeRequests()
+		.addFilter(new JwtLoginfilter(authenticationManager()))
+		.addFilterAfter(new TokenVerifier(), JwtLoginfilter.class)
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.authorizeHttpRequests()
 		.antMatchers("/","css/**","js/**","index.html")
 		.permitAll()
 		//.antMatchers("/brands").hasRole("ADMIN")
-		.antMatchers("/colours").hasRole(RoleEnum.SALE.name())
+		//.antMatchers("/colours").hasRole(RoleEnum.SALE.name())
 		//.antMatchers(HttpMethod.POST, "/brands").hasAuthority(Permission.BRAND_WRITE.getDescription())
 		//.antMatchers(HttpMethod.GET, "/brands").hasAuthority(Permission.BRAND_READ.getDescription())
 		//.antMatchers(HttpMethod.GET, "/models").hasAuthority(Permission.MODEL_READ.getDescription())
 		.anyRequest()
-		.authenticated()
-		.and()
-		.httpBasic();
+		.authenticated();
+		
 	}
 	@Bean
 	@Override
@@ -59,7 +63,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
 				//.roles("ADMIN")
 				.authorities(RoleEnum.SALE.getAuthorities())
 				.build();
-		UserDetailsService service=new InMemoryUserDetailsManager(user,build);
+	UserDetailsService service=new InMemoryUserDetailsManager(user,build);
 		return service;
 	}
 
