@@ -50,7 +50,7 @@ public class BrandController {
 		Brand brand = brandService.getById(brandId);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brand));
 	}
-	
+	@PreAuthorize("hasAuthority('brand:update')")
 	@PutMapping("{id}")
 	public ResponseEntity<?> update(@PathVariable("id") Long brandId, @RequestBody BrandDTO brandDTO){
 		Brand brand = BrandMapper.INSTANCE.toBrand(brandDTO);
