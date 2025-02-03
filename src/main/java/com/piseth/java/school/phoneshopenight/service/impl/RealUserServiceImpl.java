@@ -46,7 +46,7 @@ public class RealUserServiceImpl implements UserService {
 	}
 	private Set<SimpleGrantedAuthority> getAuthorities(Set<Role> roling) {
 	
-		Set<SimpleGrantedAuthority> collect = roling.stream().map((r->new SimpleGrantedAuthority("ROLE_" + r))).collect(Collectors.toSet());
+		Set<SimpleGrantedAuthority> collect = roling.stream().map((r->new SimpleGrantedAuthority("ROLE_" + r.getName()))).collect(Collectors.toSet());
 		Set<SimpleGrantedAuthority> collect2 = roling.stream().flatMap(role->getStream(role)).collect(Collectors.toSet());
 		collect2.addAll(collect);
 		return collect2;	
