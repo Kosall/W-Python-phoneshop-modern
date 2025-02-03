@@ -40,7 +40,7 @@ public class GeneralUtilsTest {
 	public void getCodeEn() {
 		BCryptPasswordEncoder encoder =new BCryptPasswordEncoder();
 		String pheary="pheary012";
-		 String phearyEncode = encoder.encode(pheary);
+		String phearyEncode = encoder.encode(pheary);
 		String nita="nita0002";
 		String nitaEncode = encoder.encode(nita);
 		System.out.println("Nita Encode : "+nitaEncode);
