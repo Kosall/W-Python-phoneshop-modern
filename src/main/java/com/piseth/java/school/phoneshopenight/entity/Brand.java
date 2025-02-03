@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "brands")
-public class Brand {
+public class Brand extends AuditEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY/*generator = "mySeqGen"*/)
 	//@SequenceGenerator(name="mySeqGen",sequenceName = "brands_brand_id_seq",initialValue = 1,allocationSize = 1)
