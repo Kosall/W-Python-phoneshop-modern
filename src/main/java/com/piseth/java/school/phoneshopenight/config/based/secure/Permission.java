@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum Permission {
 	BRAND_WRITE("brand:write"),
 	BRAND_READ("brand:read"),
+	BRAND_UPDATE("brand:update"),
 	MODEL_WRITE("model:write"),
 	MODEL_READ("model:read");
 	private String description;
