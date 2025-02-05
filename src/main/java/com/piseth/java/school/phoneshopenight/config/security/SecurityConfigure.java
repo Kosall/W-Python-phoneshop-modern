@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.piseth.java.school.phoneshopenight.config.FilterChainExceptionHandler;
 import com.piseth.java.school.phoneshopenight.config.based.secure.Permission;
 import com.piseth.java.school.phoneshopenight.config.jwt.JwtLoginfilter;
 import com.piseth.java.school.phoneshopenight.config.jwt.TokenVerifier;
@@ -31,14 +32,19 @@ public class SecurityConfigure {
 	private final PasswordEncoder encoder;
 	private final UserDetailsService detailsService;
 	private final AuthenticationConfiguration authenticationConfiguration;
+	private final FilterChainExceptionHandler exceptionHandler;
 
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().addFilter(new JwtLoginfilter(authenticationManager(authenticationConfiguration)))
-				.addFilterAfter(new TokenVerifier(), JwtLoginfilter.class).sessionManagement()
+		http.csrf().disable()
+				
+				.addFilter(new JwtLoginfilter(authenticationManager(authenticationConfiguration)))
+				.addFilterBefore(exceptionHandler, JwtLoginfilter.class)
+				.addFilterAfter(new TokenVerifier(), JwtLoginfilter.class)
+				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests()
-				.antMatchers("/", "css/**", "js/**", "index.html").permitAll()
-				.antMatchers(HttpMethod.PUT,"/brands/**").hasAuthority(Permission.BRAND_UPDATE.getDescription())
+				.antMatchers("/", "css/**", "js/**", "index.html").permitAll().antMatchers(HttpMethod.PUT, "/brands/**")
+				.hasAuthority(Permission.BRAND_UPDATE.getDescription())
 				// .antMatchers("/brands").hasRole("ADMIN")
 				// .antMatchers("/colours").hasRole(RoleEnum.SALE.name())
 				// .antMatchers(HttpMethod.POST,
@@ -49,7 +55,7 @@ public class SecurityConfigure {
 				// "/models").hasAuthority(Permission.MODEL_READ.getDescription())
 				.anyRequest().authenticated();
 		DefaultSecurityFilterChain build = http.build();
-		return  build;
+		return build;
 
 	}
 
@@ -67,8 +73,7 @@ public class SecurityConfigure {
 	 * .authorities(RoleEnum.SALE.getAuthorities()) .build(); UserDetailsService
 	 * service=new InMemoryUserDetailsManager(user,build); return service; }
 	 */
-	
-	
+
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(getAuthenticationProvider());
 	}
