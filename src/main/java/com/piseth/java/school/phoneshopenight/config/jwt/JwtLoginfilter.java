@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
-import javax.management.RuntimeErrorException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtLoginfilter extends UsernamePasswordAuthenticationFilter {
@@ -56,6 +53,7 @@ public class JwtLoginfilter extends UsernamePasswordAuthenticationFilter {
 			.setSubject(authResult.getName())
 			.setIssuedAt(new Date())
 			.claim("authorities", authResult.getAuthorities())
+			//.setExpiration(LocalDateTime(LocalDateTime.now().plusMinutes(5)))
 			.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusYears(3)))
 			.setIssuer("modernshop.com")
 			.signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
