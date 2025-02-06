@@ -29,11 +29,13 @@ public class SaleDetailSpecification implements Specification<SaleDetail> {
 		Join<SaleDetail, Sale> sale = sd.join("sale");
 		if (Objects.nonNull(filter.getStartDate())) {
 
-			cba.greaterThanOrEqualTo(sale.get("saleDate"), filter.getStartDate());
+			Predicate startDate = cba.greaterThanOrEqualTo(sale.get("saleDate"), filter.getStartDate());
+			predicates.add(startDate);
 		}
 		if (Objects.nonNull(filter.getEndDate())) {
 
-			cba.lessThanOrEqualTo(sale.get("saleDate"), filter.getEndDate());
+			Predicate endDate = cba.lessThanOrEqualTo(sale.get("saleDate"), filter.getEndDate());
+			predicates.add(endDate);
 		}
 		
 		
